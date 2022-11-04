@@ -1,6 +1,6 @@
 import { BaseEntity } from "src/common/infreestructure/entity/base-entity";
 import { UserEntity } from "src/user/infreestructure/entity/user.entity";
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne  } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn  } from "typeorm";
 
 @Entity("user_details")
 export class UserDetailsEntity  extends BaseEntity{
@@ -22,8 +22,8 @@ export class UserDetailsEntity  extends BaseEntity{
     @Column()
     photo: string;
 
-    @OneToOne(() => UserEntity, (userEntity) => userEntity.userDetailsEntity) // specify inverse side as a second parameter
+    @OneToOne(() => UserEntity)
+    @JoinColumn({ name:"user_id" })
     userEntity: UserEntity
-
 
 }

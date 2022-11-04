@@ -14,8 +14,7 @@ export class UserEntity extends BaseEntity{
     @Column()
     password: string;
 
-    @OneToOne(() => UserDetailsEntity)
-    @JoinColumn({ name:"user_details_id" })
+    @OneToOne(() => UserDetailsEntity, (userDetailsEntity) => userDetailsEntity.userEntity) // specify inverse side as a second parameter
     userDetailsEntity: UserDetailsEntity
 
     @OneToOne(() => FileEntity, (fileEntity) => fileEntity.userEntity) // specify inverse side as a second parameter

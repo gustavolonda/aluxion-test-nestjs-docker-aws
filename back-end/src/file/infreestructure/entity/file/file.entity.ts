@@ -13,7 +13,7 @@ export class FileEntity  extends BaseEntity{
     @Column()
     type: string;
 
-    @Column()
+    @Column({ name:"aws_id" })
     awsId: string;
 
     @OneToOne(() => UserEntity)
