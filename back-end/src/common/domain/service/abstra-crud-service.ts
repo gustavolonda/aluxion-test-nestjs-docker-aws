@@ -8,30 +8,36 @@ export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
         this.repo = repo;
     }
     async getById(id: ID): Promise<T> {
-        console.log(id);
-        return this.getByCondition({id});
+        return await this.getByParameters({id});
     }
     async update(entity: T): Promise<T> {
-        throw new Error("Method not implemented.");
+        return await this.repo.save(entity).then(e => {return e});
     }
-    async delete(entity: T): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async delete(id: ID): Promise<boolean> {
+       return await this.getById(id).then(async e =>{
+                    var entity =  this.entityDelete(e);
+                    return await this.update(entity ).then(e => {return true;})
+                                                        .catch(e => {return false;});
+                }).catch(e => {return false;});
     }
     async getAll() {
         return await this.repo.find();
     }
 
-    async getByCondition(condition) {
+    async getByParameters(parameters) {
         return await this.repo.findOne({
             select: this.getSelectedParameters(),
-            where: condition,
+            where: parameters,
         });
     }
-    
+
     async save(entity: T): Promise<T> {
         return await this.repo.create(entity);
     }
 
     abstract getSelectedParameters():any;
+    abstract entityDelete(entity: T): T;
+    abstract entityUpdate(entity: T): T;
+
  
 }

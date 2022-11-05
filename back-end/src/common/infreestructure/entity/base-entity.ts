@@ -1,14 +1,16 @@
 import { Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 export class BaseEntity {
-    @CreateDateColumn()
-    @Column({name:"created_at"})
+    @CreateDateColumn({name:"created_at"})
     createdAt: Date;
 
-    @UpdateDateColumn()
-    @Column({name:"updated_at"})
+    @UpdateDateColumn({nullable: true, name:"updated_at"})
     updatedAt: Date;
 
-    @Column()
+    @Column({
+        nullable: false,
+        default:  true,
+        type: 'bool',
+      })
     active: boolean;
 }
