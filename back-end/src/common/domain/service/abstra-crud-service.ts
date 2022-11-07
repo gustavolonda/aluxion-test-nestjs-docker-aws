@@ -30,7 +30,12 @@ export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
     }
     async getAll() {
         const active = true;
-        return await this.findByParameters({active:active});
+        return await this.findByParameters({active:active}).then(e => e).catch(
+            err =>{
+                Logger.error(err.message);
+                return err;
+            }
+        );
     }
 
     async findOneByParameters(parameters) {
@@ -47,7 +52,12 @@ export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
             where: parameters,
             relations:this.getRelations()
            
-        });
+        }).then(e => e).catch(
+            err =>{
+                Logger.error(err.message);
+                return err;
+            }
+        );
     }
 
     async save(entity: T): Promise<T> {

@@ -1,7 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { AccountApplicationEntity } from "src/account-application/infraestructura/entity/account-application.entity";
 import { BaseEntity } from "src/common/infreestructure/entity/base-entity";
-import { FileEntity } from "src/file/infreestructure/entity/file/file.entity";
+import { FileEntity } from "src/file/infreestructure/entity/file.entity";
 import {  UserDetailsEntity } from "src/user-details/infreestructure/entity/user-details.entity";
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, OneToMany  } from "typeorm";
 
@@ -24,8 +24,8 @@ export class UserEntity extends BaseEntity{
     @JoinColumn({ name:"user_details_id" })
     userDetailsEntity: UserDetailsEntity
 
-    @OneToOne(() => FileEntity, (fileEntity) => fileEntity.userEntity) // specify inverse side as a second parameter
-    fileEntity: FileEntity
+    @OneToMany(type => FileEntity, fileEntity => fileEntity.id)
+    fileEntities: FileEntity[]
 
     @OneToMany(type => AccountApplicationEntity, accountApplicationEntity => accountApplicationEntity.id)
     accountApplicationEntities: AccountApplicationEntity[]

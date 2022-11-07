@@ -15,6 +15,10 @@ import { AccountApplicationEntity } from './account-application/infraestructura/
 import { AccountApplicationService } from './account-application/domain/service/account-application.service';
 import { AccountApplicationController } from './account-application/application/rest/controller/account-application.controller';
 import { AccountApplicationProfile } from './account-application/domain/mapper/account-application-profile';
+import { FileService } from './file/domian/service/file.service';
+import { FileEntity } from './file/infreestructure/entity/file.entity';
+import { FileController } from './file/application/rest/controller/file.controller';
+import { FileProfile } from './file/domian/mapper/file-profile';
 
 
 @Module({
@@ -32,20 +36,23 @@ import { AccountApplicationProfile } from './account-application/domain/mapper/a
   }), 
   TypeOrmModule.forFeature([UserEntity,
                             UserDetailsEntity,
-                            AccountApplicationEntity]),
+                            AccountApplicationEntity, 
+                            FileEntity]),
   AutomapperModule.forRoot({
     strategyInitializer: classes(),
   })
 ],
   controllers: [UserController, 
                 UserDetailsController, 
-                AccountApplicationController],
+                AccountApplicationController, FileController],
   providers: [UserProfile,
               UserDetailsProfile, 
               AccountApplicationProfile,
+              FileProfile,
               UserService, 
               UserDetailsService, 
-              AccountApplicationService],
+              AccountApplicationService, 
+              FileService],
   exports:[UserService]
 })
 export class AppModule {}
