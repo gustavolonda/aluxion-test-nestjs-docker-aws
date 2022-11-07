@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
+import { Injectable, Logger } from "@nestjs/common";
+import { Repository, UpdateResult } from "typeorm";
 import { ICrudService } from "./icrud-service.interface";
 
 export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
@@ -7,6 +7,7 @@ export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
     constructor(public repo:  Repository<T>) {
         this.repo = repo;
     }
+    
     async getById(id: ID): Promise<T> {
         const active = true;
         return await this.findOneByParameters({id:id , active:active});
@@ -36,6 +37,7 @@ export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
         return await this.repo.findOne({
             select: this.getSelectedParameters(),
             where: parameters,
+            relations:this.getRelations()
         });
     }
 
@@ -43,16 +45,22 @@ export abstract class AbstraCrudService<T,ID> implements ICrudService<T,ID>{
         return await this.repo.find({
             select: this.getSelectedParameters(),
             where: parameters,
+            relations:this.getRelations()
+           
         });
     }
 
     async save(entity: T): Promise<T> {
-        return await this.repo.create(entity);
+        return await this.repo.save(entity).then(e => e).catch(err => {
+            Logger.error(err.message);
+            return err;
+        });
     }
 
     abstract getSelectedParameters():any;
     abstract entityDelete(entity: T): T;
     abstract entityUpdate(entityNew: T, entityOld: T): T;
+    abstract getRelations():any;
 
  
 }
