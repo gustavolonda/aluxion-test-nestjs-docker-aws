@@ -5,6 +5,7 @@ import { ApiTags,ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { UserEntity } from 'src/user/infreestructure/entity/user.entity';
 import { RegisterRequestDto } from 'src/user/domain/data/register-request-dto';
 import { Http2ServerRequest } from 'http2';
+import { UserDetailsService } from 'src/user-details/domain/service/user-details.service';
 
 @Controller('user')
 @ApiTags('User')
@@ -42,14 +43,16 @@ export class UserController {
                 response.json(u);
         })
     }
+    
     @ApiBody({ type: RegisterRequestDto })
-    @Post()
+    @Post("/register")
     save(@Body() registerRequestDto: RegisterRequestDto, @Res() response){
         this.userService.registerUser(registerRequestDto).then(r => {
             response.json(r);
         })
 
     }
+
     @Delete(":id")
     @ApiParam({
         name: 'id',

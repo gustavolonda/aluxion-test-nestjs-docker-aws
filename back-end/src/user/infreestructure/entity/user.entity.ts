@@ -1,8 +1,9 @@
 import { AutoMap } from "@automapper/classes";
+import { AccountApplicationEntity } from "src/account-application/infraestructura/entity/account-application.entity";
 import { BaseEntity } from "src/common/infreestructure/entity/base-entity";
 import { FileEntity } from "src/file/infreestructure/entity/file/file.entity";
 import {  UserDetailsEntity } from "src/user-details/infreestructure/entity/user-details.entity";
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne  } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, OneToMany  } from "typeorm";
 
 @Entity("user")
 export class UserEntity extends BaseEntity{
@@ -18,9 +19,14 @@ export class UserEntity extends BaseEntity{
     @Column()
     password: string;
 
-    @OneToOne(() => UserDetailsEntity, (userDetailsEntity) => userDetailsEntity.userEntity) // specify inverse side as a second parameter
+    @AutoMap()
+    @OneToOne(() => UserDetailsEntity)
+    @JoinColumn({ name:"user_details_id" })
     userDetailsEntity: UserDetailsEntity
 
     @OneToOne(() => FileEntity, (fileEntity) => fileEntity.userEntity) // specify inverse side as a second parameter
     fileEntity: FileEntity
+
+    @OneToMany(type => AccountApplicationEntity, accountApplicationEntity => accountApplicationEntity.id)
+    accountApplicationEntities: AccountApplicationEntity[]
 }

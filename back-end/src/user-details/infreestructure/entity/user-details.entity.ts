@@ -10,24 +10,23 @@ export class UserDetailsEntity  extends BaseEntity{
     id: number;
     
     @AutoMap()
-    @Column()
+    @Column({nullable : true})
     firstname: string;
 
     @AutoMap()
-    @Column()
+    @Column({nullable : true})
     lastname: string;
 
     @AutoMap()
-    @Column()
+    @Column({nullable : false})
     email: string;
 
     @AutoMap()
-    @Column()
+    @Column({nullable : true})
     address: string;
 
-    @AutoMap()
-    @OneToOne(() => UserEntity)
-    @JoinColumn({ name:"user_id" })
+
+    @OneToOne(() => UserEntity, (userEntity) => userEntity.userDetailsEntity) // specify inverse side as a second parameter
     userEntity: UserEntity
 
 }
