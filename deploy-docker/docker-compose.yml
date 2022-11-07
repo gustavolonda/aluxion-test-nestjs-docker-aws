@@ -1,0 +1,19 @@
+version: "3.5"
+services:
+  postgresql_db:
+    build:
+      context: ./postgresql
+    networks:
+      - backend  
+    environment:
+      - ec_profile=dev
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: always
+    ports:
+      - 5430:5432
+
+networks:
+  backend:
+    name: backend-network
